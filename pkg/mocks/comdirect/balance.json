@@ -1,0 +1,319 @@
+{
+    "paging": {
+        "index": 0,
+        "matches": 5
+    },
+    "aggregated": {
+        "depot": {
+            "depotId": "0000000E11111EC982F2D222222222D3",
+            "depotDisplayId": "1111111",
+            "clientId": "A1F1111FC2222222222B333333C44444",
+            "defaultSettlementAccountId": "0C11BC2B3C4C5D6DADF77777BA888888",
+            "settlementAccountIds": []
+        },
+        "prevDayValue": {
+            "value": "8186.59",
+            "unit": "EUR"
+        },
+        "currentValue": {
+            "value": "8141.732",
+            "unit": "EUR"
+        },
+        "purchaseValue": {
+            "value": "3612.61",
+            "unit": "EUR"
+        },
+        "profitLossPurchaseAbs": {
+            "value": "4529.122",
+            "unit": "EUR"
+        },
+        "profitLossPurchaseRel": "125.370",
+        "profitLossPrevDayAbs": {
+            "value": "13.728",
+            "unit": "EUR"
+        },
+        "profitLossPrevDayRel": "0.169"
+    },
+    "values": [
+        {
+            "depotId": "0000000E11111EC982F2D222222222D4",
+            "positionId": "AAB1BB1C1D111D1E1111F1GGG111111H",
+            "wkn": "A2PLDF",
+            "custodyType": "645",
+            "quantity": {
+                "value": "9.287",
+                "unit": "XXX"
+            },
+            "availableQuantity": {
+                "value": "9.287",
+                "unit": "XXX"
+            },
+            "currentPrice": {
+                "price": {
+                    "value": "31.705",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-13T09:26:45+01"
+            },
+            "purchasePrice": {
+                "value": "29.71250",
+                "unit": "EUR"
+            },
+            "prevDayPrice": {
+                "price": {
+                    "value": "31.55",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-12T17:36:15+01"
+            },
+            "currentValue": {
+                "value": "294.444",
+                "unit": "EUR"
+            },
+            "purchaseValue": {
+                "value": "275.94",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseAbs": {
+                "value": "18.504",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseRel": "6.706",
+            "profitLossPrevDayAbs": {
+                "value": "0.155",
+                "unit": "EUR"
+            },
+            "profitLossPrevDayRel": "0.491",
+            "version": null,
+            "hedgeability": "HEDGEABLE",
+            "availableQuantityToHedge": {
+                "value": "9",
+                "unit": "XXX"
+            }
+        },
+        {
+            "depotId": "0000000E11111EC982F2D222222222D5",
+            "positionId": "AAB1BB1C1D111D1E1111F1GGG111111I",
+            "wkn": "843002",
+            "custodyType": "004",
+            "quantity": {
+                "value": "8.729",
+                "unit": "XXX"
+            },
+            "availableQuantity": {
+                "value": "8.729",
+                "unit": "XXX"
+            },
+            "currentPrice": {
+                "price": {
+                    "value": "230.8",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-13T09:26:58+01"
+            },
+            "purchasePrice": {
+                "value": "220.56478",
+                "unit": "EUR"
+            },
+            "prevDayPrice": {
+                "price": {
+                    "value": "231.6",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-12T17:35:18+01"
+            },
+            "currentValue": {
+                "value": "2014.653",
+                "unit": "EUR"
+            },
+            "purchaseValue": {
+                "value": "1925.31",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseAbs": {
+                "value": "89.343",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseRel": "4.640",
+            "profitLossPrevDayAbs": {
+                "value": "-0.800",
+                "unit": "EUR"
+            },
+            "profitLossPrevDayRel": "-0.345",
+            "version": null,
+            "hedgeability": "HEDGEABLE",
+            "availableQuantityToHedge": {
+                "value": "8",
+                "unit": "XXX"
+            }
+        },
+        {
+            "depotId": "0000000E11111EC982F2D222222222D6",
+            "positionId": "AAB1BB1C1D111D1E1111F1GGG111111J",
+            "wkn": "918422",
+            "custodyType": "004",
+            "quantity": {
+                "value": "10",
+                "unit": "XXX"
+            },
+            "availableQuantity": {
+                "value": "10.0",
+                "unit": "XXX"
+            },
+            "currentPrice": {
+                "price": {
+                    "value": "458.15",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-13T09:24:44+01"
+            },
+            "purchasePrice": {
+                "value": "32.85700",
+                "unit": "EUR"
+            },
+            "prevDayPrice": {
+                "price": {
+                    "value": "456.0",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-12T22:26:21+01"
+            },
+            "currentValue": {
+                "value": "4581.500",
+                "unit": "EUR"
+            },
+            "purchaseValue": {
+                "value": "328.57",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseAbs": {
+                "value": "4252.930",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseRel": "1294.376",
+            "profitLossPrevDayAbs": {
+                "value": "2.150",
+                "unit": "EUR"
+            },
+            "profitLossPrevDayRel": "0.471",
+            "version": null,
+            "hedgeability": "HEDGEABLE",
+            "availableQuantityToHedge": {
+                "value": "10",
+                "unit": "XXX"
+            }
+        },
+        {
+            "depotId": "0000000E11111EC982F2D222222222D7",
+            "positionId": "AAB1BB1C1D111D1E1111F1GGG111111K",
+            "wkn": "LYX0CA",
+            "custodyType": "004",
+            "quantity": {
+                "value": "13.075",
+                "unit": "XXX"
+            },
+            "availableQuantity": {
+                "value": "13.075",
+                "unit": "XXX"
+            },
+            "currentPrice": {
+                "price": {
+                    "value": "45.565",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-13T09:17:27+01"
+            },
+            "purchasePrice": {
+                "value": "40.96597",
+                "unit": "EUR"
+            },
+            "prevDayPrice": {
+                "price": {
+                    "value": "45.64",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-12T17:36:16+01"
+            },
+            "currentValue": {
+                "value": "595.762",
+                "unit": "EUR"
+            },
+            "purchaseValue": {
+                "value": "535.63",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseAbs": {
+                "value": "60.132",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseRel": "11.226",
+            "profitLossPrevDayAbs": {
+                "value": "-0.075",
+                "unit": "EUR"
+            },
+            "profitLossPrevDayRel": "-0.164",
+            "version": null,
+            "hedgeability": "HEDGEABLE",
+            "availableQuantityToHedge": {
+                "value": "13",
+                "unit": "XXX"
+            }
+        },
+        {
+            "depotId": "0000000E11111EC982F2D222222222D8",
+            "positionId": "AAB1BB1C1D111D1E1111F1GGG111111L",
+            "wkn": "A2ANH0",
+            "custodyType": "645",
+            "quantity": {
+                "value": "73.39",
+                "unit": "XXX"
+            },
+            "availableQuantity": {
+                "value": "73.39",
+                "unit": "XXX"
+            },
+            "currentPrice": {
+                "price": {
+                    "value": "8.93",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-13T09:25:01+01"
+            },
+            "purchasePrice": {
+                "value": "7.45551",
+                "unit": "EUR"
+            },
+            "prevDayPrice": {
+                "price": {
+                    "value": "8.947",
+                    "unit": "EUR"
+                },
+                "priceDateTime": "2020-11-12T17:36:26+01"
+            },
+            "currentValue": {
+                "value": "655.373",
+                "unit": "EUR"
+            },
+            "purchaseValue": {
+                "value": "547.16",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseAbs": {
+                "value": "108.213",
+                "unit": "EUR"
+            },
+            "profitLossPurchaseRel": "19.777",
+            "profitLossPrevDayAbs": {
+                "value": "-0.017",
+                "unit": "EUR"
+            },
+            "profitLossPrevDayRel": "-0.190",
+            "version": null,
+            "hedgeability": "HEDGEABLE",
+            "availableQuantityToHedge": {
+                "value": "73",
+                "unit": "XXX"
+            }
+        }
+    ]
+}

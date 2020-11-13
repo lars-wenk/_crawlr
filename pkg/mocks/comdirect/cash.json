@@ -1,0 +1,42 @@
+{
+    "paging": {
+        "index": 0,
+        "matches": 1
+    },
+    "values": [
+        {
+            "account": {
+                "accountId": "0A111AA1A1A1A1A1HHHH11111II111111",
+                "accountDisplayId": "111111111111",
+                "currency": "EUR",
+                "clientId": "A1B1111CC2222222222D333333E44444",
+                "accountType": {
+                    "key": "SA",
+                    "text": "Verrechnungskonto"
+                },
+                "iban": "DE17000011111111111111",
+                "creditLimit": {
+                    "value": "0",
+                    "unit": "EUR"
+                }
+            },
+            "accountId": "1A11BC1D1E1F1G1HHHH11111II111111",
+            "balance": {
+                "value": "43.87",
+                "unit": "EUR"
+            },
+            "balanceEUR": {
+                "value": "43.87",
+                "unit": "EUR"
+            },
+            "availableCashAmount": {
+                "value": "43.87",
+                "unit": "EUR"
+            },
+            "availableCashAmountEUR": {
+                "value": "43.87",
+                "unit": "EUR"
+            }
+        }
+    ]
+}
