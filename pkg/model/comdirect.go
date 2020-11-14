@@ -8,6 +8,13 @@ type ComdirectAuth struct {
 	Pin           string `json:"pin"`
 }
 
+type ComdirectRequestInformation struct {
+	ClientRequestID struct {
+		SessionID string `json:"sessionId"`
+		RequestID string `json:"requestId"`
+	} `json:"clientRequestId"`
+}
+
 type ComdirectAuthResponse struct {
 	AccessToken       string `json:"access_token"`
 	TokenType         string `json:"token_type"`
@@ -21,12 +28,16 @@ type ComdirectAuthResponse struct {
 	Error_description string `json:"error_description"`
 }
 
-type ComdirectSession []struct {
-	Error             string `json:"error"`
-	Error_description string `json:"error_description"`
-	Identifier        string `json:"identifier"`
-	SessionTanActive  bool   `json:"sessionTanActive"`
-	Activated2FA      bool   `json:"activated2FA"`
+type ComdirectSessions []struct {
+	Identifier       string `json:"identifier"`
+	SessionTanActive bool   `json:"sessionTanActive"`
+	Activated2FA     bool   `json:"activated2FA"`
+}
+
+type ComdirectSession struct {
+	Identifier       string `json:"identifier"`
+	SessionTanActive bool   `json:"sessionTanActive"`
+	Activated2FA     bool   `json:"activated2FA"`
 }
 
 type ComdirectBalance struct {

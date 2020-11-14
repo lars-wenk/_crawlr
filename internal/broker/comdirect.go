@@ -3,7 +3,6 @@ package broker
 import (
 	"encoding/json"
 	"fmt"
-	"go-ethereum/log"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -26,7 +25,7 @@ const depotURL = "https://api.comdirect.de/api/brokerage/clients/user/v3/depots"
 type ComdirectCrawler interface {
 	GetAuth() error
 	GetToken() (model.ComdirectAuthResponse, error)
-	CheckSession(model.ComdirectAuthResponse) ([]model.ComdirectSession, error)
+	CheckSession(model.ComdirectAuthResponse) (model.ComdirectSession, error)
 	//GetStocks()
 }
 
@@ -44,7 +43,10 @@ func NewComdirectCrawler(conf config.Config) ComdirectCrawler {
 func (c comdirectCrawler) GetAuth() error {
 
 	rToken, err := c.GetToken()
+	fmt.Println("-----rToken: ----")
+	fmt.Println(rToken)
 	rCheck, err := c.CheckSession(rToken)
+	fmt.Println("-----rCheck: ----")
 	fmt.Println(rCheck)
 
 	if err != nil {
@@ -77,51 +79,65 @@ func (c comdirectCrawler) GetToken() (model.ComdirectAuthResponse, error) {
 
 	if err != nil {
 		//@todo - error handling
-		log.Error("err")
 	}
 
 	err = json.Unmarshal(sessionBody, &respSession)
-
 	if err != nil {
 		//@todo - error handling
-		log.Error("err")
 	}
 
 	return respSession, nil
 }
 
-func (c comdirectCrawler) CheckSession(authResp model.ComdirectAuthResponse) ([]model.ComdirectSession, error) {
-	var respSessionCheck = []model.ComdirectSession{}
+func (c comdirectCrawler) CheckSession(authResp model.ComdirectAuthResponse) (model.ComdirectSession, error) {
 	t := "GET"
 
-	requestID := c.generateRandomNumbers()
-	sessionID := c.generateRandomChars(32)
-	requestinfo := "{'clientRequestId':{'sessionId:'" + sessionID + ",'requestId':" + strconv.Itoa(requestID) + "}}"
+	r := model.ComdirectRequestInformation{}
+	r.ClientRequestID.SessionID = c.generateRandomChars(32)
+	r.ClientRequestID.RequestID = strconv.Itoa(c.generateRandomNumbers())
+
+	b, err := json.Marshal(r)
+	if err != nil {
+		//@todo - error handling
+	}
+
 	reqH := map[string]string{
 		"Content-Type":        "application/json",
 		"Accept":              "application/json",
 		"Authorization":       "Bearer " + authResp.AccessToken,
-		"x-http-request-info": requestinfo,
+		"x-http-request-info": string(b),
 	}
-	reqB := map[string]string{}
-	fmt.Println(reqH)
 
-	sessionBody, err := c.makeRequest(sessionURL, t, reqH, reqB)
+	sessionBody, err := c.makeRequest(sessionURL, t, reqH, nil)
 
 	if err != nil {
 		//@todo - error handling
-		log.Error("err")
+	}
+	var tmp []interface{}
+	if err := json.Unmarshal(sessionBody, &tmp); err != nil {
+		//@todo - error handling
 	}
 
-	err = json.Unmarshal(sessionBody, &respSessionCheck)
+	md, ok := tmp[0].(map[string]interface{})
 
-	fmt.Println(respSessionCheck)
+	if ok != true {
+		//@todo - error handling
+	}
+
+	var rc = model.ComdirectSession{}
+	rc.Identifier = md["identifier"].(string)
+	rc.SessionTanActive = md["sessionTanActive"].(bool)
+	rc.Activated2FA = md["activated2FA"].(bool)
+
+	//fmt.Println(rc)
+
 	if err != nil {
 		//@todo - error handling
-		log.Error("err")
+		fmt.Println("Fehler bei Unmarshal")
+		fmt.Println(err)
 	}
 
-	return respSessionCheck, nil
+	return rc, nil
 }
 
 func (c comdirectCrawler) makeRequest(rURL string, t string, reqH map[string]string, reqB map[string]string) ([]byte, error) {
@@ -130,7 +146,7 @@ func (c comdirectCrawler) makeRequest(rURL string, t string, reqH map[string]str
 	}
 
 	d := url.Values{}
-	if len(reqB) > 0 {
+	if len(reqB) > 0 && reqB != nil {
 		for kB, vB := range reqB {
 			d.Set(kB, vB)
 		}
@@ -165,6 +181,7 @@ func (c comdirectCrawler) generateRandomChars(length int) string {
 	for i := range b {
 		b[i] = charset[seededRand.Intn(len(charset))]
 	}
+
 	return string(b)
 }
 
