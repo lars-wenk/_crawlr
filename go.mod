@@ -1,4 +1,4 @@
-module github.com/lars-wenk/_crawl
+module github.com/lars-wenk/_crawlr
 
 go 1.13
 

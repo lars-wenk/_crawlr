@@ -8,6 +8,7 @@ const envPrefix = ""
 
 type Config struct {
 	AppEnv                 string `envconfig:"APP_ENV" default:"develop"`
+	LogLevel               string `envconfig:"LOG_LEVEL" default:"info"`
 	ComdirectClientID      string `envconfig:"COMDIRECT_CLIENT_ID"`
 	ComdirectSecretID      string `envconfig:"COMDIRECT_SECRET_ID"`
 	ComdirectZugangsnummer string `envconfig:"COMDIRECT_ZUGANGSNUMMER"`

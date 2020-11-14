@@ -9,20 +9,24 @@ type ComdirectAuth struct {
 }
 
 type ComdirectAuthResponse struct {
-	AccessToken  string `json:"access_token"`
-	TokenType    string `json:"token_type"`
-	RefreshToken string `json:"refresh_token"`
-	ExpiresIn    int    `json:"expires_in"`
-	Scope        string `json:"scope"`
-	Kdnr         string `json:"kdnr"`
-	Bpid         int    `json:"bpid"`
-	KontaktID    int64  `json:"kontaktId"`
+	AccessToken       string `json:"access_token"`
+	TokenType         string `json:"token_type"`
+	RefreshToken      string `json:"refresh_token"`
+	ExpiresIn         int    `json:"expires_in"`
+	Scope             string `json:"scope"`
+	Kdnr              string `json:"kdnr"`
+	Bpid              int    `json:"bpid"`
+	KontaktID         int64  `json:"kontaktId"`
+	Error             string `json:"error"`
+	Error_description string `json:"error_description"`
 }
 
 type ComdirectSession []struct {
-	Identifier       string `json:"identifier"`
-	SessionTanActive bool   `json:"sessionTanActive"`
-	Activated2FA     bool   `json:"activated2FA"`
+	Error             string `json:"error"`
+	Error_description string `json:"error_description"`
+	Identifier        string `json:"identifier"`
+	SessionTanActive  bool   `json:"sessionTanActive"`
+	Activated2FA      bool   `json:"activated2FA"`
 }
 
 type ComdirectBalance struct {

@@ -1,6 +1,7 @@
 package crawlr
 
 import (
+	"context"
 	"time"
 
 	"github.com/lars-wenk/_crawlr/internal/broker"
@@ -19,11 +20,13 @@ type Controller interface {
 
 type controller struct {
 	conf config.Config
+	ctx  context.Context
 }
 
-func NewController(conf config.Config) Controller {
+func NewController(conf config.Config, ctx context.Context) Controller {
 	return &controller{
 		conf: conf,
+		ctx:  ctx,
 	}
 }
 
@@ -33,7 +36,7 @@ func (c *controller) Start() {
 
 func (c *controller) crawlComdirect(conf config.Config) {
 	cc := broker.NewComdirectCrawler(c.conf)
-	cc.NewComdirectCrawler()
+	cc.GetAuth()
 
 	return
 }
