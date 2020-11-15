@@ -3,15 +3,13 @@ package broker
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
-	"net/http"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/lars-wenk/_crawlr/internal/config"
+	"github.com/lars-wenk/_crawlr/internal/utils"
 	"github.com/lars-wenk/_crawlr/pkg/model"
 )
 
@@ -25,7 +23,8 @@ const depotURL = "https://api.comdirect.de/api/brokerage/clients/user/v3/depots"
 type ComdirectCrawler interface {
 	GetAuth() error
 	GetToken() (model.ComdirectAuthResponse, error)
-	CheckSession(model.ComdirectAuthResponse) (model.ComdirectSession, error)
+	CheckSession(model.ComdirectAuthResponse) (model.ComdirectSession, string, error)
+	TwoFactorAuth(model.ComdirectAuthResponse, model.ComdirectSession, string) (model.ComdirectSession, error)
 	//GetStocks()
 }
 
@@ -45,9 +44,12 @@ func (c comdirectCrawler) GetAuth() error {
 	rToken, err := c.GetToken()
 	fmt.Println("-----rToken: ----")
 	fmt.Println(rToken)
-	rCheck, err := c.CheckSession(rToken)
+	rCheck, requestInfo, err := c.CheckSession(rToken)
 	fmt.Println("-----rCheck: ----")
 	fmt.Println(rCheck)
+	r2FA, err := c.TwoFactorAuth(rToken, rCheck, requestInfo)
+	fmt.Println("-----r2FA: ----")
+	fmt.Println(r2FA)
 
 	if err != nil {
 		return err
@@ -61,21 +63,21 @@ func (c comdirectCrawler) GetStocks() {
 
 func (c comdirectCrawler) GetToken() (model.ComdirectAuthResponse, error) {
 	var respSession = model.ComdirectAuthResponse{}
-	t := "POST"
+
 	reqH := map[string]string{
 		"Content-Type": "application/x-www-form-urlencoded",
 		"Accept":       "application/json",
 	}
 
-	reqB := map[string]string{
-		"client_id":     c.conf.ComdirectClientID,
-		"client_secret": c.conf.ComdirectSecretID,
-		"grant_type":    "password",
-		"username":      c.conf.ComdirectZugangsnummer,
-		"password":      c.conf.ComdirectTAN,
-	}
+	d := url.Values{}
+	d.Set("client_id", c.conf.ComdirectClientID)
+	d.Set("client_secret", c.conf.ComdirectSecretID)
+	d.Set("grant_type", "password")
+	d.Set("username", c.conf.ComdirectZugangsnummer)
+	d.Set("password", c.conf.ComdirectTAN)
 
-	sessionBody, err := c.makeRequest(authURL, t, reqH, reqB)
+	cr := utils.NewHttpRequest()
+	sessionBody, err := cr.MakePostRequest(authURL, reqH, d)
 
 	if err != nil {
 		//@todo - error handling
@@ -89,26 +91,18 @@ func (c comdirectCrawler) GetToken() (model.ComdirectAuthResponse, error) {
 	return respSession, nil
 }
 
-func (c comdirectCrawler) CheckSession(authResp model.ComdirectAuthResponse) (model.ComdirectSession, error) {
-	t := "GET"
+func (c comdirectCrawler) CheckSession(authResp model.ComdirectAuthResponse) (model.ComdirectSession, string, error) {
 
-	r := model.ComdirectRequestInformation{}
-	r.ClientRequestID.SessionID = c.generateRandomChars(32)
-	r.ClientRequestID.RequestID = strconv.Itoa(c.generateRandomNumbers())
-
-	b, err := json.Marshal(r)
-	if err != nil {
-		//@todo - error handling
-	}
-
+	rIStrg := string(c.getRequestInformation())
 	reqH := map[string]string{
 		"Content-Type":        "application/json",
 		"Accept":              "application/json",
 		"Authorization":       "Bearer " + authResp.AccessToken,
-		"x-http-request-info": string(b),
+		"x-http-request-info": rIStrg,
 	}
 
-	sessionBody, err := c.makeRequest(sessionURL, t, reqH, nil)
+	cr := utils.NewHttpRequest()
+	sessionBody, err := cr.MakeGetRequest(sessionURL, reqH)
 
 	if err != nil {
 		//@todo - error handling
@@ -137,38 +131,49 @@ func (c comdirectCrawler) CheckSession(authResp model.ComdirectAuthResponse) (mo
 		fmt.Println(err)
 	}
 
-	return rc, nil
+	return rc, rIStrg, nil
 }
 
-func (c comdirectCrawler) makeRequest(rURL string, t string, reqH map[string]string, reqB map[string]string) ([]byte, error) {
-	client := http.Client{
-		Timeout: httpRequestTimeout,
+func (c comdirectCrawler) TwoFactorAuth(authResp model.ComdirectAuthResponse, session model.ComdirectSession, requestInfo string) (model.ComdirectSession, error) {
+
+	reqH := map[string]string{
+		"Content-Type":        "application/json",
+		"Accept":              "application/json",
+		"Authorization":       "Bearer " + authResp.AccessToken,
+		"x-http-request-info": requestInfo,
 	}
 
-	d := url.Values{}
-	if len(reqB) > 0 && reqB != nil {
-		for kB, vB := range reqB {
-			d.Set(kB, vB)
-		}
-	}
+	session.Activated2FA = true
+	session.SessionTanActive = true
 
-	req, err := http.NewRequest(t, rURL, strings.NewReader(d.Encode()))
+	rBJSON, err := json.Marshal(session)
+	rBJSONtoStrg := string(rBJSON)
+	sessionURLValidate := sessionURL + "/" + session.Identifier + "/validate"
+
+	cr := utils.NewHttpRequest()
+	sessionBody, err := cr.MakePostJSONRequest(sessionURLValidate, reqH, rBJSONtoStrg)
+
+	var rc = model.ComdirectSession{}
+	err = json.Unmarshal(sessionBody, &rc)
 	if err != nil {
-		return nil, err
+		//@todo - error handling
 	}
 
-	for kH, vH := range reqH {
-		req.Header.Set(kH, vH)
-	}
+	return rc, nil
 
-	resp, err := client.Do(req)
+}
+
+func (c comdirectCrawler) getRequestInformation() []byte {
+	r := model.ComdirectRequestInformation{}
+	r.ClientRequestID.SessionID = c.generateRandomChars(32)
+	r.ClientRequestID.RequestID = strconv.Itoa(c.generateRandomNumbers())
+
+	b, err := json.Marshal(r)
 	if err != nil {
-		return nil, err
+		//@todo - error handling
 	}
 
-	defer resp.Body.Close()
-
-	return ioutil.ReadAll(resp.Body)
+	return b
 }
 
 func (c comdirectCrawler) generateRandomChars(length int) string {
